@@ -1,0 +1,10 @@
+name: BorderExpander
+version: ${project.version}
+main: dev.patrickjurt.borderexpander.BorderExpanderPlugin
+api-version: '1.21'
+authors: [PatrickJurt]
+commands:
+  borderexpander:
+    aliases: [be]
+    usage: /<command> <items|stats>
+    description: BorderExpander commands

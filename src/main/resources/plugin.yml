@@ -1,6 +1,6 @@
 name: BorderExpander
 version: ${project.version}
-main: dev.patrickjurt.borderexpander.BorderExpanderPlugin
+main: dev.patrickjurt.borderexpander.Main
 api-version: '1.21'
 authors: [PatrickJurt]
 commands:

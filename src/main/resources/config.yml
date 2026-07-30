@@ -1,3 +1,9 @@
 lategame-player-1: ""
 lategame-player-2: ""
 scan-interval-ticks: 20
+world-name: "border_world"
+base-border-size: 1
+# Minimum border diameter (blocks) to ensure the border is visible to clients.
+# Minecraft clients don't render very small borders well; set to 2.0 to guarantee visibility
+# while keeping the logical base size small if desired.
+min-visible-size: 2.0

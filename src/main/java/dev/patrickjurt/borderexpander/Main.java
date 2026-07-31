@@ -243,13 +243,13 @@ public final class Main extends JavaPlugin {
             return false;
         }
 
-        Bukkit.broadcastMessage(player.getName() + " obtained " + prettyMaterialName(material));
-        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
-            onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75f, 1.1f);
-        }
-
         boolean newGlobalItem = globallyFoundItems.add(material);
         if (newGlobalItem) {
+            Bukkit.broadcastMessage(player.getName() + " obtained " + prettyMaterialName(material));
+            for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+                onlinePlayer.playSound(onlinePlayer.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.75f, 1.1f);
+            }
+
             if (!lategameAnnounced && globallyFoundItems.size() >= 1000) {
                 lategameAnnounced = true;
                 Bukkit.broadcastMessage("Lategame unlocked: every new item now expands the border by 10 blocks.");
@@ -268,6 +268,10 @@ public final class Main extends JavaPlugin {
     }
 
     private void teleportToGameplayWorldIfNeeded(Player player) {
+        if (player.getWorld().equals(world)) {
+            return;
+        }
+
         Location current = player.getLocation();
         Location spawn = world.getSpawnLocation();
         Location safeLocation = new Location(world, spawn.getBlockX() + 0.5D, spawn.getY(), spawn.getBlockZ() + 0.5D,

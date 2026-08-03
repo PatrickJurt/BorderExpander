@@ -380,6 +380,10 @@ public final class Main extends JavaPlugin {
         return playerFoundItems.getOrDefault(playerId, Collections.emptySet());
     }
 
+    public Set<Material> getGloballyFoundItems() {
+        return Collections.unmodifiableSet(globallyFoundItems);
+    }
+
     public String prettyMaterialName(Material material) {
         return material.name().toLowerCase(Locale.ROOT).replace('_', ' ');
     }

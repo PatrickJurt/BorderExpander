@@ -4,6 +4,7 @@ import dev.patrickjurt.borderexpander.Main;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +26,9 @@ public final class ItemsCommand implements SubCommand {
             sender.sendMessage("Only players can use this command.");
             return true;
         }
-        plugin.getMissingItemsMenu().open(player, 0);
+
+        String filter = args.length > 1 ? String.join(" ", Arrays.copyOfRange(args, 1, args.length)) : "";
+        plugin.getMissingItemsMenu().open(player, 0, filter);
         return true;
     }
 

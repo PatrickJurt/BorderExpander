@@ -32,12 +32,12 @@ public final class InventoryClickListener implements Listener {
         }
 
         if (event.getRawSlot() == 45) {
-            plugin.getMissingItemsMenu().open(player, holder.page() - 1);
+            plugin.getMissingItemsMenu().open(player, holder.page() - 1, holder.filter());
             return;
         }
 
         if (event.getRawSlot() == 53) {
-            plugin.getMissingItemsMenu().open(player, holder.page() + 1);
+            plugin.getMissingItemsMenu().open(player, holder.page() + 1, holder.filter());
         }
     }
 }

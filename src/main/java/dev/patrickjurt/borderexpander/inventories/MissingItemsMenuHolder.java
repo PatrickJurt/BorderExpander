@@ -6,7 +6,7 @@ import org.bukkit.inventory.InventoryHolder;
 
 import java.util.UUID;
 
-public record MissingItemsMenuHolder(UUID playerId, int page) implements InventoryHolder {
+public record MissingItemsMenuHolder(UUID playerId, int page, String filter) implements InventoryHolder {
     private static final int MENU_SIZE = 54;
 
     @Override

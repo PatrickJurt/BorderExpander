@@ -10,6 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public final class MissingItemsMenu {
@@ -23,11 +24,16 @@ public final class MissingItemsMenu {
     }
 
     public void open(Player player, int requestedPage) {
-        List<Material> missingItems = getMissingItemsForPlayer(player);
+        open(player, requestedPage, "");
+    }
+
+    public void open(Player player, int requestedPage, String filter) {
+        String normalizedFilter = filter == null ? "" : filter.trim().toLowerCase(Locale.ROOT);
+        List<Material> missingItems = getGloballyMissingItems(normalizedFilter);
         int pageCount = Math.max(1, (int) Math.ceil(missingItems.size() / (double) PAGE_SIZE));
         int page = Math.max(0, Math.min(requestedPage, pageCount - 1));
 
-        Inventory inventory = Bukkit.createInventory(new MissingItemsMenuHolder(player.getUniqueId(), page), MENU_SIZE,
+        Inventory inventory = Bukkit.createInventory(new MissingItemsMenuHolder(player.getUniqueId(), page, normalizedFilter), MENU_SIZE,
             "Missing Items " + (page + 1) + "/" + pageCount);
 
         int startIndex = page * PAGE_SIZE;
@@ -64,10 +70,11 @@ public final class MissingItemsMenu {
         return button;
     }
 
-    private List<Material> getMissingItemsForPlayer(Player player) {
-        Set<Material> found = plugin.getFoundItems(player.getUniqueId());
+    private List<Material> getGloballyMissingItems(String filter) {
+        Set<Material> found = plugin.getGloballyFoundItems();
         return plugin.getAllTrackableItems().stream()
             .filter(material -> !found.contains(material))
+            .filter(material -> filter.isEmpty() || plugin.prettyMaterialName(material).toLowerCase(Locale.ROOT).contains(filter))
             .sorted(Comparator.comparing(Material::name, String.CASE_INSENSITIVE_ORDER))
             .toList();
     }

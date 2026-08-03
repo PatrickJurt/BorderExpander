@@ -68,11 +68,18 @@ public final class Main extends JavaPlugin {
     }
 
     private void logWorldStatus() {
-        Location spawn = world.getSpawnLocation();
-        Location center = world.getWorldBorder().getCenter();
-        getLogger().info("World ready. Spawn=("
-            + spawn.getBlockX() + "," + spawn.getBlockY() + "," + spawn.getBlockZ() + ") BorderCenter=("
-            + center.getBlockX() + "," + center.getBlockZ() + ") BorderSize=" + world.getWorldBorder().getSize());
+        // Log status for each loaded gameplay world (Overworld, Nether, End)
+        for (World w : getServer().getWorlds()) {
+            World.Environment env = w.getEnvironment();
+            if (env != World.Environment.NORMAL && env != World.Environment.NETHER && env != World.Environment.THE_END) {
+                continue;
+            }
+            Location spawn = w.getSpawnLocation();
+            Location center = w.getWorldBorder().getCenter();
+            getLogger().info("World ready (" + env.name() + "): name='" + w.getName() + "' Spawn=("
+                + spawn.getBlockX() + "," + spawn.getBlockY() + "," + spawn.getBlockZ() + ") BorderCenter=("
+                + center.getBlockX() + "," + center.getBlockZ() + ") BorderSize=" + w.getWorldBorder().getSize());
+        }
     }
 
     @Override
@@ -303,11 +310,19 @@ public final class Main extends JavaPlugin {
 
     private void applyBorderSize() {
         double size = Math.max(computeCurrentBorderSize(), 1D);
-        world.getWorldBorder().setSize(size);
-        if (size%2 == 0) {
-            world.getWorldBorder().setCenter(world.getSpawnLocation().getBlockX() + 1D, world.getSpawnLocation().getBlockZ() + 1D);
-        }else{
-            world.getWorldBorder().setCenter(world.getSpawnLocation().getBlockX() + 0.5D, world.getSpawnLocation().getBlockZ() + 0.5D);
+        // Apply the same border size and center logic to Overworld, Nether and The End
+        for (World w : getServer().getWorlds()) {
+            World.Environment env = w.getEnvironment();
+            if (env != World.Environment.NORMAL && env != World.Environment.NETHER && env != World.Environment.THE_END) {
+                continue;
+            }
+
+            w.getWorldBorder().setSize(size);
+            if (size % 2 == 0) {
+                w.getWorldBorder().setCenter(w.getSpawnLocation().getBlockX() + 1D, w.getSpawnLocation().getBlockZ() + 1D);
+            } else {
+                w.getWorldBorder().setCenter(w.getSpawnLocation().getBlockX() + 0.5D, w.getSpawnLocation().getBlockZ() + 0.5D);
+            }
         }
     }
 
